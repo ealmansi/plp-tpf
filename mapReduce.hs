@@ -8,17 +8,17 @@ type Dict k v = [(k,v)]
 
 -- Ejercicio 1
 belongs :: Eq k => k -> Dict k v -> Bool
-belongs = (\k d -> elem k (map fst d))
+belongs k d = elem k (map fst d)
 
 (?) :: Eq k => Dict k v -> k -> Bool
-(?) = (\d k -> belongs k d)
+(?) d k = belongs k d
 
 -- Ejercicio 2
 get :: Eq k => k -> Dict k v -> v
-get = (\k d -> snd $ head $ filter (\x -> k == fst x) d)
+get k d = snd $ head $ filter (\x -> k == fst x) d
 
 (!) :: Eq k => Dict k v -> k -> v
-(!) = (\d k -> get k d)
+(!) d k = get k d
 
 -- Ejercicio 3
 insertWith :: Eq k => (v -> v -> v) -> k -> v -> Dict k v -> Dict k v
