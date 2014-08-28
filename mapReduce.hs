@@ -39,7 +39,7 @@ groupByKey xs = [(k, valuesOf k) | k <- keys]
 unionWith :: Eq k => (v -> v -> v) -> Dict k v -> Dict k v -> Dict k v
 unionWith f d1 d2 = [(k, valueOf k) | k <- union (keys d1) (keys d2)]
   where
-    keys d = map fst d
+    keys = map fst
     valueOf k
       | (d1 ? k) && (d2 ? k)  = f (d1 ! k) (d2 ! k)
       | (d1 ? k)              = (d1 ! k)
