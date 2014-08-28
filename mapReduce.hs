@@ -8,34 +8,42 @@ type Dict k v = [(k,v)]
 
 -- Ejercicio 1
 belongs :: Eq k => k -> Dict k v -> Bool
-belongs k d = elem k (map fst d)
+belongs k d = elem k $ map fst d
 
 (?) :: Eq k => Dict k v -> k -> Bool
 (?) d k = belongs k d
 
 -- Ejercicio 2
 get :: Eq k => k -> Dict k v -> v
-get k d = snd $ head $ filter (\x -> k == fst x) d
+get k d = snd $ head $ filter (\kv -> (fst kv) == k) d
 
 (!) :: Eq k => Dict k v -> k -> v
 (!) d k = get k d
 
 -- Ejercicio 3
 insertWith :: Eq k => (v -> v -> v) -> k -> v -> Dict k v -> Dict k v
-insertWith = undefined
---Main> insertWith (++) 2 ['p'] (insertWith (++) 1 ['a','b'] (insertWith (++) 1 ['l'] []))
---[(1,"lab"),(2,"p")]
+insertWith f k v d
+  | d ? k       = map (\kv -> newValue kv) d
+  | otherwise   = (k, v) : d
+  where
+    newValue kv = ((fst kv), if (fst kv) == k then f (snd kv) v else (snd kv))
 
 -- Ejercicio 4
 groupByKey :: Eq k => [(k,v)] -> Dict k [v]
-groupByKey = undefined
+groupByKey xs = [(k, valuesOf k) | k <- keys]
+  where
+    keys = nub $ map fst xs
+    valuesOf k = map snd $ filter (\kv -> (fst kv) == k) xs
 
 -- Ejercicio 5
 unionWith :: Eq k => (v -> v -> v) -> Dict k v -> Dict k v -> Dict k v
-unionWith = undefined
---Main> unionWith (++) [("calle",[3]),("city",[2,1])] [("calle", [4]), ("altura", [1,3,2])]
---[("calle",[3,4]),("city",[2,1]),("altura",[1,3,2])]
-
+unionWith f d1 d2 = [(k, valueOf k) | k <- union (keys d1) (keys d2)]
+  where
+    keys d = map fst d
+    valueOf k
+      | (d1 ? k) && (d2 ? k)  = f (d1 ! k) (d2 ! k)
+      | (d1 ? k)              = (d1 ! k)
+      | otherwise             = (d2 ! k)
 
 -- ------------------------------Sección 2--------------MapReduce---------------------------
 

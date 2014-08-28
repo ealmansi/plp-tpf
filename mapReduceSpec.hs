@@ -9,17 +9,27 @@ import MapReduce
 main :: IO ()
 main = hspec $ do
   describe "Utilizando Diccionarios" $ do
-    it "puede determinarse si un elemento es una clave o no" $ do
+    it "belongs, (?)" $ do
       belongs 3 [(3, "A"), (0, "R"), (7, "G")]    `shouldBe` True
       belongs "k" []                              `shouldBe` False
       [("H", [1]), ("E", [2]), ("Y", [0])] ? "R"  `shouldBe` False
       [("V", [1]), ("O", [2]), ("S", [0])] ? "V"  `shouldBe` True
       [("calle",[3]),("city",[2,1])] ? "city"     `shouldBe` True
-    it "puede obtenerse el valor asociado a una clave o no" $ do
+    
+    it "get, (!)" $ do
       get 3 [(3, "A"), (0, "R"), (7, "G")]        `shouldBe` "A"
       [("V", [1]), ("O", [2]), ("S", [0])] ! "V"  `shouldBe` [1]
       [("calle",[3]),("city",[2,1])] ! "city"     `shouldBe` [2,1]
+    
+    it "insertWith" $ do
+      insertWith (++) 2 ['p'] (insertWith (++) 1 ['a','b'] (insertWith (++) 1 ['l'] [])) `shouldMatchList` [(1,"lab"),(2,"p")]
+    
+    it "groupByKey" $ do
+      groupByKey [("calle","Jean Jaures"),("ciudad","Brujas"),("ciudad","Kyoto"),("calle","7")] `shouldMatchList` [("calle",["Jean Jaures","7"]),("ciudad",["Brujas","Kyoto"])]
 
+    it "unionWith" $ do
+      unionWith (++) [("calle",[3]),("city",[2,1])] [("calle", [4]), ("altura", [1,3,2])] `shouldMatchList` [("calle",[3,4]),("city",[2,1]),("altura",[1,3,2])]
+  
   --describe "Utilizando Map Reduce" $ do
   --  it "visitas por monumento funciona en algún orden" $ do
   --    visitasPorMonumento [ "m1" ,"m2" ,"m3" ,"m2","m1", "m3", "m3"] `shouldMatchList` [("m3",3), ("m1",2), ("m2",2)] 
