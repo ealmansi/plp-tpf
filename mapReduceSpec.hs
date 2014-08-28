@@ -14,11 +14,16 @@ main = hspec $ do
       belongs "k" []                              `shouldBe` False
       [("H", [1]), ("E", [2]), ("Y", [0])] ? "R"  `shouldBe` False
       [("V", [1]), ("O", [2]), ("S", [0])] ? "V"  `shouldBe` True
+      [("calle",[3]),("city",[2,1])] ? "city"     `shouldBe` True
+    it "puede obtenerse el valor asociado a una clave o no" $ do
+      get 3 [(3, "A"), (0, "R"), (7, "G")]        `shouldBe` "A"
+      [("V", [1]), ("O", [2]), ("S", [0])] ! "V"  `shouldBe` [1]
+      [("calle",[3]),("city",[2,1])] ! "city"     `shouldBe` [2,1]
 
-  describe "Utilizando Map Reduce" $ do
-    it "visitas por monumento funciona en algún orden" $ do
-      visitasPorMonumento [ "m1" ,"m2" ,"m3" ,"m2","m1", "m3", "m3"] `shouldMatchList` [("m3",3), ("m1",2), ("m2",2)] 
+  --describe "Utilizando Map Reduce" $ do
+  --  it "visitas por monumento funciona en algún orden" $ do
+  --    visitasPorMonumento [ "m1" ,"m2" ,"m3" ,"m2","m1", "m3", "m3"] `shouldMatchList` [("m3",3), ("m1",2), ("m2",2)] 
 
-    it "monumentosTop devuelve los más visitados en algún orden" $ do 
-      monumentosTop [ "m1", "m0", "m0", "m0", "m2", "m2", "m3"] 
-      `shouldSatisfy` (\res -> res == ["m0", "m2", "m3", "m1"] || res == ["m0", "m2", "m1", "m3"])
+  --  it "monumentosTop devuelve los más visitados en algún orden" $ do 
+  --    monumentosTop [ "m1", "m0", "m0", "m0", "m2", "m2", "m3"] 
+  --    `shouldSatisfy` (\res -> res == ["m0", "m2", "m3", "m1"] || res == ["m0", "m2", "m1", "m3"])
