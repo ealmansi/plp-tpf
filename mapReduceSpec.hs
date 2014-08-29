@@ -22,14 +22,22 @@ main = hspec $ do
       [("calle",[3]),("city",[2,1])] ! "city"     `shouldBe` [2,1]
     
     it "insertWith" $ do
-      insertWith (++) 2 ['p'] (insertWith (++) 1 ['a','b'] (insertWith (++) 1 ['l'] [])) `shouldMatchList` [(1,"lab"),(2,"p")]
+      insertWith (++) 2 ['p'] (insertWith (++) 1 ['a','b'] (insertWith (++) 1 ['l'] []))
+      `shouldMatchList` [(1,"lab"),(2,"p")]
     
     it "groupByKey" $ do
-      groupByKey [("calle","Jean Jaures"),("ciudad","Brujas"),("ciudad","Kyoto"),("calle","7")] `shouldMatchList` [("calle",["Jean Jaures","7"]),("ciudad",["Brujas","Kyoto"])]
+      groupByKey [("calle","Jean Jaures"),("ciudad","Brujas"),("ciudad","Kyoto"),("calle","7")]
+      `shouldMatchList` [("calle",["Jean Jaures","7"]),("ciudad",["Brujas","Kyoto"])]
 
     it "unionWith" $ do
-      unionWith (++) [("calle",[3]),("city",[2,1])] [("calle", [4]), ("altura", [1,3,2])] `shouldMatchList` [("calle",[3,4]),("city",[2,1]),("altura",[1,3,2])]
+      unionWith (++) [("calle",[3]),("city",[2,1])] [("calle", [4]), ("altura", [1,3,2])]
+      `shouldMatchList` [("calle",[3,4]),("city",[2,1]),("altura",[1,3,2])]
   
+    it "distributionProcess" $ do
+      distributionProcess 5 [1 ,2 ,3 ,4 ,5 ,6 ,7 ,8 ,9 ,10 ,11 ,12]
+      `shouldBe` [[1 ,6 ,11] ,[2 ,7 ,12] ,[3 ,8] ,[4 ,9] ,[5 ,10]]
+
+
   --describe "Utilizando Map Reduce" $ do
   --  it "visitas por monumento funciona en algún orden" $ do
   --    visitasPorMonumento [ "m1" ,"m2" ,"m3" ,"m2","m1", "m3", "m3"] `shouldMatchList` [("m3",3), ("m1",2), ("m2",2)] 

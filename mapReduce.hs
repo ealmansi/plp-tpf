@@ -51,8 +51,13 @@ type Mapper a k v = a -> [(k,v)]
 type Reducer k v b = (k, [v]) -> [b]
 
 -- Ejercicio 6
+-- a cada elemento x de xs lo transforma en (i, x), donde i es el
+-- bucket que le corresponde. luego, la respuesta es una comprensión
+-- de n buckets, cada uno de ellos con los elementos que le corresponden.
 distributionProcess :: Int -> [a] -> [[a]]
-distributionProcess = undefined
+distributionProcess n xs = [map snd $ filter (\y -> (fst y) == i) ys | i <- [1..n]]
+  where
+    ys = zip [1 + mod (i - 1) n | i <- [1..length xs]] xs
 
 -- Ejercicio 7
 mapperProcess :: Eq k => Mapper a k v -> [a] -> [(k,[v])]
