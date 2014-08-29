@@ -49,6 +49,7 @@ unionWith f d1 d2 = [(k, valueOf k) | k <- union (keys d1) (keys d2)]
 
 type Mapper a k v = a -> [(k,v)]
 type Reducer k v b = (k, [v]) -> [b]
+data Structure = Street | City | Monument deriving Show
 
 -- Ejercicio 6
 -- a cada elemento x de xs lo transforma en (i, x), donde i es el
@@ -77,7 +78,12 @@ reducerProcess rd xs = concat $ foldr (\x r -> (rd x) : r) [] xs
 -- Ejercicio 10
 -- no estoy 100% seguro de que esto sea lo que pide el enunciado
 mapReduce :: (Eq k, Ord k) => Mapper a k v -> Reducer k v b -> [a] -> [b]
-mapReduce mp rd xs = reducerProcess rd (combinerProcess $ map (mapperProcess mp) (distributionProcess 100 xs))
+mapReduce mp rd xs = reduced . combined . mapped . distributed $ xs
+  where
+    distributed = distributionProcess 100
+    mapped = map (mapperProcess mp)
+    combined = combinerProcess
+    reduced = reducerProcess rd
 
 -- Ejercicio 11
 visitasPorMonumento :: [String] -> Dict String Int
@@ -87,9 +93,12 @@ visitasPorMonumento = mapReduce mp rd
     rd (k, vs) = [(k, length vs)]
 
 -- Ejercicio 12
+-- esto está feo
 monumentosTop :: [String] -> [String]
--- esto no creo que les guste
-monumentosTop xs = map fst $ sortBy (\a b -> compare (snd b) (snd a)) (visitasPorMonumento xs)
+monumentosTop xs = mapReduce mp rd $ visitasPorMonumento xs
+  where
+    mp (s, i) = [("", (s, i))]
+    rd (k, vs) = map fst $ sortBy (\a b -> compare (snd b) (snd a)) $ vs
 
 -- Ejercicio 13 
 monumentosPorPais :: [(Structure, Dict String String)] -> [(String, Int)]
@@ -98,37 +107,3 @@ monumentosPorPais = mapReduce mp rd
     mp (Monument, dt) = [(dt ! "country", 1)]
     mp (_, dt) = []
     rd (k, vs) = [(k, length vs)]
-
-
-
--- ------------------------ Ejemplo de datos del ejercicio 13 ----------------------
-data Structure = Street | City | Monument deriving Show
-
-items :: [(Structure, Dict String String)]
-items = [
-    (Monument, [
-      ("name","Obelisco"),
-      ("latlong","-36.6033,-57.3817"),
-      ("country", "Argentina")]),
-    (Street, [
-      ("name","Int. Güiraldes"),
-      ("latlong","-34.5454,-58.4386"),
-      ("country", "Argentina")]),
-    (Monument, [
-      ("name", "San Martín"),
-      ("country", "Argentina"),
-      ("latlong", "-34.6033,-58.3817")]),
-    (City, [
-      ("name", "Paris"),
-      ("country", "Francia"),
-      ("latlong", "-24.6033,-18.3817")]),
-    (Monument, [
-      ("name", "Bagdad Bridge"),
-      ("country", "Irak"),
-      ("new_field", "new"),
-      ("latlong", "-11.6033,-12.3817")])
-    ]
-
-
-------------------------------------------------
-------------------------------------------------

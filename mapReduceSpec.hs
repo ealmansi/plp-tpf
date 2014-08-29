@@ -6,6 +6,35 @@
 import Test.Hspec
 import MapReduce
 
+-- ------------------------ Ejemplo de datos del ejercicio 13 ----------------------
+
+items :: [(Structure, Dict String String)]
+items = [
+    (Monument, [
+      ("name","Obelisco"),
+      ("latlong","-36.6033,-57.3817"),
+      ("country", "Argentina")]),
+    (Street, [
+      ("name","Int. Güiraldes"),
+      ("latlong","-34.5454,-58.4386"),
+      ("country", "Argentina")]),
+    (Monument, [
+      ("name", "San Martín"),
+      ("country", "Argentina"),
+      ("latlong", "-34.6033,-58.3817")]),
+    (City, [
+      ("name", "Paris"),
+      ("country", "Francia"),
+      ("latlong", "-24.6033,-18.3817")]),
+    (Monument, [
+      ("name", "Bagdad Bridge"),
+      ("country", "Irak"),
+      ("new_field", "new"),
+      ("latlong", "-11.6033,-12.3817")])
+    ]
+
+------------------------------------------------
+
 main :: IO ()
 main = hspec $ do
   describe "Utilizando Diccionarios" $ do
@@ -32,12 +61,12 @@ main = hspec $ do
     it "unionWith" $ do
       unionWith (++) [("calle",[3]),("city",[2,1])] [("calle", [4]), ("altura", [1,3,2])]
       `shouldMatchList` [("calle",[3,4]),("city",[2,1]),("altura",[1,3,2])]
-  
+
+  describe "Utilizando Map Reduce" $ do
     it "distributionProcess" $ do
       distributionProcess 5 [1 ,2 ,3 ,4 ,5 ,6 ,7 ,8 ,9 ,10 ,11 ,12]
       `shouldBe` [[1 ,6 ,11] ,[2 ,7 ,12] ,[3 ,8] ,[4 ,9] ,[5 ,10]]
-
-  describe "Utilizando Map Reduce" $ do
+      
     it "visitas por monumento funciona en algún orden" $ do
       visitasPorMonumento [ "m1" ,"m2" ,"m3" ,"m2","m1", "m3", "m3"] `shouldMatchList` [("m3",3), ("m1",2), ("m2",2)]
 
