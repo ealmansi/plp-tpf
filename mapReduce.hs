@@ -60,20 +60,24 @@ distributionProcess n xs = [map snd $ filter (\y -> (fst y) == i) ys | i <- [1..
     ys = zip [1 + mod (i - 1) n | i <- [1..length xs]] xs
 
 -- Ejercicio 7
+-- no estoy 100% seguro de que esto sea lo que pide el enunciado
 mapperProcess :: Eq k => Mapper a k v -> [a] -> [(k,[v])]
-mapperProcess = undefined
+mapperProcess mp xs = groupByKey $ concat $ map mp xs
 
 -- Ejercicio 8
+-- no estoy 100% seguro de que esto sea lo que pide el enunciado
 combinerProcess :: (Eq k, Ord k) => [[(k, [v])]] -> [(k,[v])]
-combinerProcess = undefined
+combinerProcess = foldr (\x r -> unionWith (++) x r) []
 
 -- Ejercicio 9
+-- no estoy 100% seguro de que esto sea lo que pide el enunciado
 reducerProcess :: Reducer k v b -> [(k, [v])] -> [b]
-reducerProcess = undefined
+reducerProcess rd xs = concat $ foldr (\x r -> (rd x) : r) [] xs
 
 -- Ejercicio 10
+-- no estoy 100% seguro de que esto sea lo que pide el enunciado
 mapReduce :: (Eq k, Ord k) => Mapper a k v -> Reducer k v b -> [a] -> [b]
-mapReduce = undefined
+mapReduce mp rd xs = reducerProcess rd (combinerProcess $ map (mapperProcess mp) (distributionProcess 100 xs))
 
 -- Ejercicio 11
 visitasPorMonumento :: [String] -> Dict String Int
