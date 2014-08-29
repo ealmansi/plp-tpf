@@ -100,6 +100,7 @@ monumentosPorPais = mapReduce mp rd
     rd (k, vs) = [(k, length vs)]
 
 
+
 -- ------------------------ Ejemplo de datos del ejercicio 13 ----------------------
 data Structure = Street | City | Monument deriving Show
 
