@@ -85,6 +85,7 @@ visitasPorMonumento = mapReduce (\s -> [(s, 1)]) (\(k, vs) -> [(k, length vs)])
 
 -- Ejercicio 12
 monumentosTop :: [String] -> [String]
+-- esto no creo que les guste
 monumentosTop xs = map fst $ sortBy (\a b -> compare (snd b) (snd a)) (visitasPorMonumento xs)
 
 -- Ejercicio 13 
