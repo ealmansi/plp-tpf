@@ -37,11 +37,10 @@ main = hspec $ do
       distributionProcess 5 [1 ,2 ,3 ,4 ,5 ,6 ,7 ,8 ,9 ,10 ,11 ,12]
       `shouldBe` [[1 ,6 ,11] ,[2 ,7 ,12] ,[3 ,8] ,[4 ,9] ,[5 ,10]]
 
+  describe "Utilizando Map Reduce" $ do
+    it "visitas por monumento funciona en algún orden" $ do
+      visitasPorMonumento [ "m1" ,"m2" ,"m3" ,"m2","m1", "m3", "m3"] `shouldMatchList` [("m3",3), ("m1",2), ("m2",2)]
 
-  --describe "Utilizando Map Reduce" $ do
-  --  it "visitas por monumento funciona en algún orden" $ do
-  --    visitasPorMonumento [ "m1" ,"m2" ,"m3" ,"m2","m1", "m3", "m3"] `shouldMatchList` [("m3",3), ("m1",2), ("m2",2)] 
-
-  --  it "monumentosTop devuelve los más visitados en algún orden" $ do 
-  --    monumentosTop [ "m1", "m0", "m0", "m0", "m2", "m2", "m3"] 
-  --    `shouldSatisfy` (\res -> res == ["m0", "m2", "m3", "m1"] || res == ["m0", "m2", "m1", "m3"])
+    it "monumentosTop devuelve los más visitados en algún orden" $ do 
+      monumentosTop [ "m1", "m0", "m0", "m0", "m2", "m2", "m3"] 
+      `shouldSatisfy` (\res -> res == ["m0", "m2", "m3", "m1"] || res == ["m0", "m2", "m1", "m3"])

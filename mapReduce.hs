@@ -81,11 +81,11 @@ mapReduce mp rd xs = reducerProcess rd (combinerProcess $ map (mapperProcess mp)
 
 -- Ejercicio 11
 visitasPorMonumento :: [String] -> Dict String Int
-visitasPorMonumento = undefined
+visitasPorMonumento = mapReduce (\s -> [(s, 1)]) (\(k, vs) -> [(k, length vs)])
 
 -- Ejercicio 12
 monumentosTop :: [String] -> [String]
-monumentosTop = undefined
+monumentosTop xs = map fst $ sortBy (\a b -> compare (snd b) (snd a)) (visitasPorMonumento xs)
 
 -- Ejercicio 13 
 monumentosPorPais :: [(Structure, Dict String String)] -> [(String, Int)]
