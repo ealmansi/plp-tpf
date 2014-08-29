@@ -81,7 +81,10 @@ mapReduce mp rd xs = reducerProcess rd (combinerProcess $ map (mapperProcess mp)
 
 -- Ejercicio 11
 visitasPorMonumento :: [String] -> Dict String Int
-visitasPorMonumento = mapReduce (\s -> [(s, 1)]) (\(k, vs) -> [(k, length vs)])
+visitasPorMonumento = mapReduce mp rd
+  where
+    mp s = [(s, 1)]
+    rd (k, vs) = [(k, length vs)]
 
 -- Ejercicio 12
 monumentosTop :: [String] -> [String]
@@ -90,7 +93,11 @@ monumentosTop xs = map fst $ sortBy (\a b -> compare (snd b) (snd a)) (visitasPo
 
 -- Ejercicio 13 
 monumentosPorPais :: [(Structure, Dict String String)] -> [(String, Int)]
-monumentosPorPais = undefined
+monumentosPorPais = mapReduce mp rd
+  where
+    mp (Monument, dt) = [(dt ! "country", 1)]
+    mp (_, dt) = []
+    rd (k, vs) = [(k, length vs)]
 
 
 -- ------------------------ Ejemplo de datos del ejercicio 13 ----------------------

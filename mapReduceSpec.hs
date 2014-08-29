@@ -44,3 +44,7 @@ main = hspec $ do
     it "monumentosTop devuelve los más visitados en algún orden" $ do 
       monumentosTop [ "m1", "m0", "m0", "m0", "m2", "m2", "m3"] 
       `shouldSatisfy` (\res -> res == ["m0", "m2", "m3", "m1"] || res == ["m0", "m2", "m1", "m3"])
+
+    it "monumentosPorPais" $ do 
+      monumentosPorPais items
+      `shouldMatchList` [("Argentina", 2), ("Irak", 1)]
