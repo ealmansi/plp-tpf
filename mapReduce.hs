@@ -11,14 +11,14 @@ belongs :: Eq k => k -> Dict k v -> Bool
 belongs k d = elem k $ map fst $ d
 
 (?) :: Eq k => Dict k v -> k -> Bool
-(?) d k = belongs k d
+(?) = flip belongs
 
 -- Ejercicio 2
 get :: Eq k => k -> Dict k v -> v
 get k d = snd $ head $ filter (\kv -> (fst kv) == k) $ d
 
 (!) :: Eq k => Dict k v -> k -> v
-(!) d k = get k d
+(!) = flip get
 
 -- Ejercicio 3
 insertWith :: Eq k => (v -> v -> v) -> k -> v -> Dict k v -> Dict k v
